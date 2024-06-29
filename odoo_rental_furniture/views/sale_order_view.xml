@@ -1,231 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="sale_order_rental_inherit_form_bv_store" model="ir.ui.view">
-            <field name="name">sale.order.rental.inherit.form.bv</field>
-            <field name="model">sale.order</field>
-            <field
-            name="inherit_id"
-            ref="sale_renting_sign.rental_order_inherit_rental_sign"
-        />
-            <field name="arch" type="xml">
-                <xpath
-                expr="//div[@name='button_box']/button[@name='action_view_sign']"
-                position="replace"
-            />
-            </field>
-    </record>
-
-    <!-- Form View  -->
-     <record id="sale_order_inherit_form_bv_store" model="ir.ui.view">
-            <field name="name">sale.order.inherit.form.bv</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//div[@name='button_box']" position="inside">
-                    <field name="is_order_underdate" invisible="1" />
-                    <button
-                    name="action_view_sign"
-                    type="object"
-                    class="oe_stat_button"
-                    icon="fa-pencil"
-                >
-                        <field
-                        name="sign_request_count"
-                        widget="statinfo"
-                        string="Document(s) Signed"
-                    />
-                    </button>
-                </xpath>
-                <xpath expr="//button[@name='action_cancel']" position='attributes'>
-                    <attribute
-                    name="invisible"
-                >state not in ['draft', 'sent', 'sale'] or not id or locked or not is_order_underdate</attribute>
-                    <attribute name="string">Terminate</attribute>
-                </xpath>
-                <xpath expr="//button[@name='action_cancel']" position='after'>
-                    <button
-                    name="action_cancel"
-                    type="object"
-                    string="Close"
-                    invisible="state not in ['draft', 'sent', 'sale'] or not id or locked or is_order_underdate"
-                    data-hotkey="x"
-                />
-                </xpath>
-                <xpath expr="//header/field[@name='state'] " position="replace">
-                    <field
-                    name="state"
-                    widget="statusbar"
-                    options="{'clickable': '1'}"
-                />
-                </xpath>
-                 <xpath expr="//div[@name='button_box']" position="after">
-                     <field
-                    name="order_rental_state"
-                    class="float-end fs-6"
-                    widget="badge"
-                    decoration-info="order_rental_state in ['available']"
-                    decoration-success="order_rental_state in ['occupied']"
-                    decoration-warning="order_rental_state in ['reserved']"
-                    decoration-danger="order_rental_state in ['blocked']"
-                    invisible="not is_rental_order"
-                />
-                 </xpath>
-                <xpath expr="//button[@name='action_cancel']" position="after">
-                    <field name="validated" invisible="1" />
-                    <field name='rental_month_ids' invisible="1"/>
-                    <button
-                    name="send_agreement"
-                    string="Send Agreement"
-                    class="btn btn-primary"
-                    type="object"
-                    invisible="sign_request_count > 0 or state in ['sale', 'cancel'] or (rental_month_ids and not is_status_validated)"
-                />
-
-                </xpath>
-                <xpath expr="//field[@name='payment_term_id']" position="after">
-                    <field
-                    name="msg_cancel_reason"
-                    invisible="state not in ['cancel']"
-                />
-                </xpath>
-                <xpath expr="//field[@name='pro_rated_rent']" position="after">
-                    <field name="is_status_validated" invisible="1"/>
-                    <field name="is_status_signed" invisible="1"/>
-                </xpath>
-                <xpath
-                expr="//field[@name='order_line']//form//field[@name='price_unit']"
-                position="after"
-            >
-                    <field name="deposit" />
-                    <field name="storage_fee" />
-                    <field name="cleaning_fee" />
-                    <field name="disposal_fee" />
-                    <field name="late_payment_fee" />
-                    <field name="fee_for_return_cheque" />
-                    <field name="late_payment_fee" />
-                    <field name="bank_fee" />
-                    <field name="prepayment" />
-                </xpath>
-                <xpath
-                expr="//field[@name='order_line']//tree//field[@name='price_unit']"
-                position="after"
-            >
-                    <field name="deposit" optional="hide" />
-                    <field name="storage_fee" optional="hide" />
-                    <field name="cleaning_fee" optional="hide" />
-                    <field name="disposal_fee" optional="hide" />
-                    <field name="late_payment_fee" optional="hide" />
-                    <field name="fee_for_return_cheque" optional="hide" />
-                    <field name="late_payment_fee" optional="hide" />
-                    <field name="bank_fee" optional="hide" />
-                    <field name="prepayment" optional="hide" />
-                </xpath>
-                <xpath expr="//field[@name='partner_id']" position="before">
-                    <field name="sale_order_type" />
-                </xpath>
-                <xpath expr="//field[@name='partner_id']" position="after">
-                </xpath>
-                <xpath expr="//field[@name='sale_order_template_id']" position="after">
-                    <field name="is_merged_order" invisible="0" />
-                </xpath>
-                <xpath expr="//field[@name='date_order']" position="after">
-                    <field name="quotation_sent_date" />
-                </xpath>
-                <xpath expr="//notebook/page[last()]" position="after">
-                    <page name="pg_business_agreement" string="Business Agreement">
-                        <group>
-                            <group name="grp_storage_space" string="Storage Space">
-                                <field name="storage_space" />
-                            </group>
-                        </group>
-                        <field name="auth_representative_ids">
-                            <tree editable="bottom">
-                                <field name="title" />
-                                <field
-                                name="partner_id"
-                                options="{'no_create': True, 'no_open': True}"
-                            />
-                                <field name="first_name" />
-                                <field name="last_name" />
-                                <field name="fin_nric_number" />
-                                <field name="expiry_date" />
-                                <field name="dob" />
-                                <field name="id_sighted" />
-                                <field name="position" />
-                            </tree>
-                        </field>
-                        <group string="Hot Desking Membership" name="grp_hot_desking">
-                            <field name="commencement_date" />
-                             <field name="access_hours" />
-                             <field name="meeting_room_credits" />
-                             <field name="printing_credits" />
-                         </group>
-                        <group>
-                           <field name="is_consent_given" />
-                        </group>
-                        <group>
-                            <field name="is_consent_given" />
-                        </group>
-                    </page>
-                    <page name="pg_dangerous_goods" string="Dangerous Goods">
-                        <group>
-                            <group name="grp_storer" string="Storer">
-                                <field name="cust_company" />
-                                <field name="cust_sale_person" />
-                            </group>
-                            <group
-                            name="grp_alternate_contact"
-                            string="Alternate Contact"
-                        >
-                                <field name="alter_nric_name" />
-                                <field name="alter_relationship" />
-                                <field name="alter_email" />
-                                <field name="alter_mobile" />
-                            </group>
-                            <group name="grp_storage_space" string="Storage Space">
-                                <field name="storage_unit_id" />
-                                <field name="approximate_unit_type" />
-                                <field name="location" />
-                            </group>
-                            <group name="grp_term" string="Term">
-                                <field name="term_from" />
-                                <field name="term_to" />
-                                <field name="term_prior_notice" />
-                            </group>
-                        </group>
-                    </page>
-                </xpath>
-                <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-                    <attribute
-                    name="invisible"
-                >state != 'draft' or sign_request_count == 0</attribute>
-                </xpath>
-            </field>
-    </record>
-
-    <record id="sale_order_rental_inherit_form_bv" model="ir.ui.view">
-        <field name="name">sale.order.rental.inherit.form.bv</field>
+    <record id="rental_order_custom_form_view" model="ir.ui.view">
+        <field name="name">rental.order.custom.form</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale_renting.rental_order_form_view" />
+        <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('rounded-pill')][1]" position="replace" />
-            <xpath expr="//div[hasclass('rounded-pill')][2]" position="replace" />
-            <xpath expr="//div[hasclass('rounded-pill')][3]" position="replace" />
-            <xpath expr="//div[hasclass('rounded-pill')][4]" position="replace" />
-            <xpath expr="//div[hasclass('rounded-pill')][5]" position="replace" />
+             <header position="inside">
+                <field name="is_rental_order" invisible="1"/>
+                <field name="has_rented_products" invisible="1"/>
+            </header>
+            <field name="payment_term_id" position="after">
+                <field name="rental_return_date" invisible="1" required="has_rented_products"/>
+                <field name="rental_start_date"
+                       string="Rental period"
+                       widget="daterange"
+                       options="{'end_date_field': 'rental_return_date'}"
+                       required="has_rented_products"/>
+                <label for="duration_days" string="Duration" invisible="not rental_start_date"/>
+                <div class="o_row" invisible="not is_rental_order and not rental_start_date">
+                    <field class="oe_inline" style="max-width: 2rem" name="duration_days" invisible="duration_days == 0"/>
+                    <span invisible="duration_days != 1"> day </span>
+                    <span invisible="duration_days in [0,1]"> days </span>
+                    <span invisible="duration_days == 0 or remaining_hours == 0">and </span>
+                    <field class="oe_inline" style="max-width: 2rem" name="remaining_hours" invisible="remaining_hours == 0"/>
+                    <span invisible="remaining_hours != 1"> hour </span>
+                    <span invisible="remaining_hours in [0,1]"> hours </span>
+                </div>
+            </field>
         </field>
     </record>
 
-    <record id="sale_order_cancel_inherit_form_bv" model="ir.ui.view">
-        <field name="name">sale.order.cancel.inherit.form.bv</field>
-        <field name="model">sale.order.cancel</field>
-        <field name="inherit_id" ref="sale.sale_order_cancel_view_form"/>
+    <record id="rental_order_primary_form_view" model="ir.ui.view">
+        <field name="name">rental.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_send_mail_and_cancel']" position="attributes">
-                <attribute name="string">Send And Close</attribute>
+            <!-- options key for rental app knowledge in the rental configurator -->
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_id']" position='attributes'>
+                <attribute name="context">{
+                    'partner_id': parent.partner_id,
+                    'quantity': product_uom_qty,
+                    'pricelist': parent.pricelist_id,
+                    'uom':product_uom,
+                    'company_id': parent.company_id,
+                    'default_lst_price': price_unit,
+                    'default_description_sale': name,
+                    'default_rent_ok': 1,
+                    'rental_products': True,
+                }
+                </attribute>
+                <attribute name="domain">
+                    ['|', ('sale_ok', '=', True), ('rent_ok', '=', True),
+                        '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                </attribute>
+                <attribute name="options">{
+                    'no_open': True,
+                    'rent': True,
+                }</attribute>
             </xpath>
-            <xpath expr="//button[@name='action_cancel']" position="attributes">
-                <attribute name="string">Close</attribute>
+            <xpath expr="//notebook/page[@name='order_lines']/field/tree/field[@name='product_template_id']" position='attributes'>
+                <attribute name="context">{
+                    'partner_id': parent.partner_id,
+                    'quantity': product_uom_qty,
+                    'pricelist': parent.pricelist_id,
+                    'uom':product_uom,
+                    'company_id': parent.company_id,
+                    'default_list_price': price_unit,
+                    'default_description_sale': name,
+                    'default_rent_ok': 1,
+                    'rental_products': True,
+                }
+                </attribute>
+                <attribute name="domain">
+                    ['|', ('sale_ok', '=', True), ('rent_ok', '=', True),
+                        '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                </attribute>
+                <attribute name="options">{
+                    'no_open': True,
+                    'rent': True,
+                }</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//form//field[@name='product_id']" position='attributes'>
+                <attribute name="domain">
+                    ['|', ('sale_ok', '=', True), ('rent_ok', '=', True),
+                        '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
+                </attribute>
             </xpath>
         </field>
     </record>

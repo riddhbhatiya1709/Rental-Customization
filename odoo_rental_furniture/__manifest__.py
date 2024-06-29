@@ -9,12 +9,10 @@
     
     """,
     "website": "",
-    "depends": [
-        "sale",
-    ],
+    'depends': ['sale', 'sale_management'],
     "data": [
         "security/ir.model.access.csv",
-        # "views/product_template_view.xml",
+        "views/product_template_view.xml",
         "views/sale_order_view.xml",
     ],
     "application": True,

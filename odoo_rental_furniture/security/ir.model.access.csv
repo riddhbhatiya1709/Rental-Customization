@@ -1,4 +1,1 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_group_sale_person_manager,access_group_sale_person_manager,bv_sale_custom.model_sale_order,bv_sale_custom.group_sale_person_manager,1,1,1,1
-access_group_block_reason,access_group_block_reason,bv_sale_custom.model_block_reason,base.group_erp_manager,1,1,1,1
-access_group_auth_representative_line,access_group_auth_representative_line,bv_sale_custom.model_auth_representative_line,base.group_erp_manager,1,1,1,1

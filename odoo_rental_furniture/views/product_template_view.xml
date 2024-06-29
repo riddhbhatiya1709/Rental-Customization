@@ -1,36 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <!-- Form View -->
-    <record id="product_template_form_view_inherit_bv" model="ir.ui.view">
-        <field name="name">product.template.form.view.inherit.bv</field>
+    <record id="product_template_rental_custom_form_view" model="ir.ui.view">
+        <field name="name">product.template.rental.custom.form.inherit</field>
         <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='categ_id']" position="before">
-                <field name="deposit_amount" />
-                <field name="related_storage_status" invisible="1" />
-             </xpath>
-            <xpath expr="//field[@name='invoice_policy']" position="before">
-                <field
-                    name="block_reason"
-                    invisible="related_storage_status not in ['blocked']"
-                />
-            </xpath>
-            <xpath expr="//button[@name='action_open_label_layout']" position="after">
-                <button
-                    string="Block"
-                    name="block_button"
-                    type="object"
-                    data-hotkey="w"
-                    invisible="not rent_ok or related_storage_status != 'available'"
-                />
-                <button
-                    string="Available"
-                    name="available_button"
-                    type="object"
-                    data-hotkey="w"
-                    invisible="not rent_ok or related_storage_status not in ['blocked']"
-                />
+            <xpath expr="//div[@name='options']" position='inside'>
+                <span class="d-inline-block">
+                    <field name="rent_ok"/>
+                    <label for="rent_ok"/>
+                </span>
             </xpath>
         </field>
     </record>
