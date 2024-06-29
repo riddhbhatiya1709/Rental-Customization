@@ -28,7 +28,6 @@ class SaleOrder(models.Model):
         help="The leftover hours of the rental period.",
     )
 
-
     @api.depends('order_line.is_rental')
     def _compute_is_rental_order(self):
         for order in self:

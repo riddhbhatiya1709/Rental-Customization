@@ -86,6 +86,9 @@
                         '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]
                 </attribute>
             </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+                <field name="display_rental_price"/>
+            </xpath>
         </field>
     </record>
 </odoo>

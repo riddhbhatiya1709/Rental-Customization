@@ -12,6 +12,10 @@
                     <label for="rent_ok"/>
                 </span>
             </xpath>
+            <xpath expr="//div[@name='standard_price_uom']" position="after">
+                <field name="rent_price_on_day" class="oe_inline" widget="monetary" invisible="not rent_ok"/>
+            </xpath>
+
         </field>
     </record>
 
