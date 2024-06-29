@@ -16,7 +16,7 @@ class SaleOrderLine(models.Model):
     rent_price_on_day = fields.Float(
         string="Rent Price (Per Day)",
         help="Rent price for single day.",
-        default=10
+        compute="_compute_rent_price_on_day"
     )
 
     display_rental_price = fields.Char(
@@ -25,6 +25,19 @@ class SaleOrderLine(models.Model):
         help="First rental pricing of the product",
     )
 
-    @api.depends('product_id', 'rent_price_on_day', 'order_id.duration_days', 'product_id.rent_price_on_day')
+    @api.depends('product_id', 'rent_price_on_day', 'order_id.duration_days', 'product_id.rent_price_on_day',
+                 'product_uom_qty')
     def _compute_display_price(self):
-        self.display_rental_price = self.rent_price_on_day * self.order_id.duration_days * self.product_uom_qty
+        for rec in self:
+            rec.display_rental_price = rec.rent_price_on_day * rec.order_id.duration_days * rec.product_uom_qty
+
+    @api.depends('product_id', 'product_id.rent_price_on_day')
+    def _compute_rent_price_on_day(self):
+        for rec in self:
+            if rec.product_template_id:
+                rec.rent_price_on_day = rec.product_template_id.rent_price_on_day
+                # if product is rental then keep price unit 0 to balance the account.
+                if rec.product_template_id.rent_ok:
+                    rec.price_unit = 0
+            else:
+                rec.rent_price_on_day = 0
