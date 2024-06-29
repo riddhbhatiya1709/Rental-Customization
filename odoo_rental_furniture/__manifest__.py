@@ -9,7 +9,7 @@
     
     """,
     "website": "",
-    'depends': ['sale', 'sale_management'],
+    'depends': ['sale', 'sale_management', 'calendar'],
     "data": [
         "security/ir.model.access.csv",
         "views/product_template_view.xml",
