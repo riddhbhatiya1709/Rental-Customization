@@ -47,7 +47,3 @@ class SaleOrder(models.Model):
                 duration = order.rental_return_date - order.rental_start_date
                 order.duration_days = duration.days
                 order.remaining_hours = ceil(duration.seconds / 3600)
-
-    def action_confirm(self):
-        self.order_lines
-        return self.mrp_production_ids.with_context(ctx, skip_consumption=True).button_mark_done()
