@@ -19,4 +19,12 @@
         </field>
     </record>
 
+    <menuitem id="rental_product_view_menu"
+        name="Rental Product" action="product.product_template_action"
+        sequence="7"/>
+
+    <menuitem id="rental_product_menu_items" name="Products" action="product.product_template_action" parent="rental_product_view_menu"/>
+
+    <menuitem id="booking_reservation_menu_items" name="Reservation" action="calendar.action_calendar_event" parent="rental_product_view_menu"/>
+
 </odoo>
