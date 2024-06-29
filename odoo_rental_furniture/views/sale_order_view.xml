@@ -91,4 +91,9 @@
             </xpath>
         </field>
     </record>
+
+    <menuitem id="rental_product_view_menu"
+            name="Rental Product" action="product.product_template_action"
+            sequence="7"/>
+
 </odoo>
